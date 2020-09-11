@@ -1,5 +1,5 @@
 class DosesController < ApplicationController
-  before_action :dose_params, only: [:destroy]
+  before_action :find_dose, only: [:destroy]
 
   def index
     @doses = Dose.all
@@ -15,13 +15,12 @@ class DosesController < ApplicationController
     else
       :new
     end
+  end
 
-    def destroy
-      @dose.destroy
+  def destroy
+    @dose.destroy
 
-      redirect_to cocktail_path(@dose.cocktail)
-    end
-
+    redirect_to cocktail_path(@dose.cocktail)
   end
 
   private
