@@ -1,9 +1,20 @@
-<ul>
-  <% @cocktails.each do |cocktail| %>
-  <li>
-    <%= link_to cocktail.name, cocktail_path(cocktail) %>
-  </li>
-  <% end %>
-</ul>
+<h2>Make your own with our recipes</h2>
 
-<%= link_to 'Create a new cocktail', new_cocktail_path %>
+<div class="card-deck d-flex justify-content-around">
+  <div class="row">
+  <% @cocktails.each do |cocktail| %>
+  <div class="col-sm-12 col-md-6 col-lg-4 py-3">
+  <div class="card" style="width: 18rem;">
+
+    <%= link_to cocktail_path(cocktail) do %>
+      <%= cl_image_tag cocktail.photo.key, class: "card-img-top" %>
+      <div class="card-body d-flex justify-content-around">
+        <h5 class="card-title"> <%= cocktail.name %> </h5>
+        <%= link_to '🗑', cocktail_path(cocktail), method: :delete %>
+      </div>
+    <% end %>
+  </div>
+  </div>
+  <% end %>
+  </div>
+</div>

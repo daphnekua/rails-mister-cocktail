@@ -11,3 +11,22 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
+
+.hero {
+  margin: 0 0 0 80px;
+  background-image: url(asset-path('bg-img-unsplash.png'));
+  position: relative;
+  width: 60%;
+  height: 600px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+// .hero-text {
+//   text-align: left;
+//   color: #000000;
+//   position: absolute;
+//   top: 50vh;
+//   left: 24px;
+// }

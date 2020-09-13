@@ -7,12 +7,62 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 require 'open-uri'
-require 'json'
 
-url = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
-raw_json = open(url).read
-json = JSON.parse(raw_json)
+Cocktail.destroy_all
+Ingredient.destroy_all
+Dose.destroy_all
 
-json["drinks"].each do |ingredient|
-  Ingredient.create!(name: ingredient["strIngredient1"])
+x = 11000
+
+until x == 11029
+  url = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=#{x}"
+  raw_json = open(url).read
+  json = JSON.parse(raw_json)
+
+  if !json['drinks'].nil?
+    new_cocktail = Cocktail.new(name: json['drinks'].first['strDrink'])
+
+    image_url = json['drinks'].first['strDrinkThumb']
+    file = URI.open(image_url)
+    new_cocktail.photo.attach(io: file, filename: "cocktail_#{x}.jpg", content_type: 'image/jpg')
+    puts "Photo attached"
+
+    new_cocktail.save!
+    puts "New #{x} cocktail saved"
+
+    i = 1
+
+    until json['drinks'].first["strIngredient#{i}"].nil?
+      if Ingredient.where(name: json['drinks'].first["strIngredient#{i}"]).exists?
+        new_ingredient = Ingredient.where(name: json['drinks'].first["strIngredient#{i}"]).first
+        puts "Ingredient #{i} exists"
+
+        if json['drinks'].first["strMeasure#{i}"].nil?
+          new_dose = Dose.new(description: 'Some')
+        else
+          new_dose = Dose.new(description: json['drinks'].first["strMeasure#{i}"])
+        end
+      else
+        new_ingredient = Ingredient.new(name: json['drinks'].first["strIngredient#{i}"])
+        new_ingredient.save!
+        puts "New ingredient created #{i}"
+
+        if json['drinks'].first["strMeasure#{i}"].nil?
+          new_dose = Dose.new(description: 'Some')
+        else
+          new_dose = Dose.new(description: json['drinks'].first["strMeasure#{i}"])
+        end
+      end
+
+      new_dose.cocktail = new_cocktail
+      new_dose.ingredient = new_ingredient
+      new_dose.save!
+
+      puts "New dose #{i} created"
+
+      i += 1
+    end
+  end
+
+  x += 1
 end
