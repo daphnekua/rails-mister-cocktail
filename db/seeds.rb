@@ -43,14 +43,14 @@ until x == 11029
           new_dose = Dose.new(description: json['drinks'].first["strMeasure#{i}"])
         end
       else
-        new_ingredient = Ingredient.new(name: json['drinks'].first["strIngredient#{i}"])
-        new_ingredient.save!
+        new_ingredient = Ingredient.create(name: json['drinks'].first["strIngredient#{i}"])
         puts "New ingredient created #{i}"
 
         if json['drinks'].first["strMeasure#{i}"].nil?
           new_dose = Dose.new(description: 'Some')
         else
           new_dose = Dose.new(description: json['drinks'].first["strMeasure#{i}"])
+          puts "Dose setup done"
         end
       end
 

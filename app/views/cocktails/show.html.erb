@@ -17,9 +17,9 @@
 <h3 class="my-3">What people are saying</h3>
 
 <ul>
-<% @cocktail.reviews.each do |review| %>
-  <li> <%= review.content %> - <%= review.name %></li>
-<% end %>
+  <% @cocktail.reviews.each do |review| %>
+    <li> <%= review.content %> - <%= review.name %></li>
+  <% end %>
 </ul>
 
 <%= simple_form_for [@cocktail, @review] do |f| %>
