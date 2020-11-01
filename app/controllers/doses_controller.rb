@@ -1,7 +1,7 @@
 class DosesController < ApplicationController
   before_action :find_dose, only: [:destroy]
 
-  def all
+  def index
     @cocktail = Cocktail.find(params[:cocktail_id])
     @doses = @cocktail.doses
   end
